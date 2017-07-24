@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .clearfix {
+            overflow: auto;
+            zoom: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #cal {
+            width: 310px;
+            height: 360px;
+            margin: 20px auto;
+            background: #c47335;
+            padding-top: 20px;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        ul {
+            margin: 0 auto;
+            width: 276px;
+        }
+
+        li {
+            color: #c47335;
+            margin-left: 2px;
+            margin-right: 2px;
+            margin-top: 5px;
+            text-align: center;
+            line-height: 49px;
+            width: 65px;
+            height: 49px;
+            float: left;
+            background: #fff;
+        }
+
+        #show {
+            width: 277px;
+            text-align: right;
+            height: 27px;
+            background: #f19953;
+            margin: 0 auto;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cal">
+        <div id="show"></div>
+        <ul class="clearfix">
+            <li>AC</li>
+            <li>CE</li>
+            <li>%</li>
+            <li>/</li>
+            <li>7</li>
+            <li>8</li>
+            <li>9</li>
+            <li>*</li>
+            <li>4</li>
+            <li>5</li>
+            <li>6</li>
+            <li>-</li>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>+</li>
+            <li>.</li>
+            <li>0</li>
+            <li>Ans</li>
+            <li>=</li>
+        </ul>
+    </div>
+    <script>
+        var show = document.getElementById("show");
+        var lis = document.getElementsByTagName("li");
+        for (let i = 0; i < lis.length - 2; i++) {
+            lis[i].onclick = function () {
+                if (i == 0) {
+                    show.innerHTML = "";
+                } else if (i == 1) {
+                    console.log(show.innerText);
+                    var temp = show.innerText.split("");
+                    temp.pop();
+                    show.innerText = temp.join("");
+                } else {
+                    show.innerHTML += this.innerHTML;
+                }
+                //alert(i);
+            }
+        }
+        lis[lis.length - 1].onclick = function () {
+            var ptn = /[\*|\/|\+\-|\%]/g;
+            var items = show.innerHTML.split(ptn);
+            console.log(items);
+            var a = show.innerHTML.match(ptn);
+            console.log(a);
+            //`console.log(parseFloat(items[0])+a[0]+parseFloat(items[1]));
+            for (let i = 0; i < a.length; i++) {
+                if (a[i] == "*") {
+                    items.splice(i, 2, parseFloat(items[i]) * parseFloat(items[i + 1]));
+                    a.splice(i, 1);
+
+                }
+                if (a[i] == "%") {
+                    items.splice(i, 2, parseFloat(items[i]) % parseFloat(items[i + 1]));
+                    a.splice(i, 1);
+                }
+                if (a[i] == "/") {
+                    items.splice(i, 2, parseFloat(items[i]) / parseFloat(items[i + 1]));
+                    a.splice(i, 1);
+                }
+            }
+            var sum = parseFloat(items[0]);
+            for (var j = 1; j < items.length; j++) {
+                if (a[j - 1] == "+") {
+                    sum += parseFloat(items[j]);
+                }
+                if (a[j - 1] == "-") {
+                    sum -= parseFloat(items[j]);
+                }
+            }
+            show.innerHTML = sum;
+        }
+    </script>
+</body>
+</html>
